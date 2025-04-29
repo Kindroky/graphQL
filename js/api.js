@@ -36,8 +36,11 @@ export async function fetchUserData() {
         throw new Error("Failed to fetch user data");
     }
 
-    const user_data = await response.json();
+    
 
+    const user_data = await response.json();
+    console.log(user_data);
     //return the data of the first user : me
-    return user_data.data.user[0];
+
+    return user_data.data.user[0]; 
 };
