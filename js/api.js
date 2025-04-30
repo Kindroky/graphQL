@@ -1,5 +1,3 @@
-import { getJWT } from './session.js';
-
 /**
  * Fetches the user's profile data from the Zone01 GraphQL API.
  
@@ -13,13 +11,13 @@ import { getJWT } from './session.js';
 
 export async function fetchUserData() {
     //get the token that we stored after login
-    const token = localStorage.getItem("jwt");
+    const token = sessionStorage.getItem("jwt");
 
     //fetch user data thanks to the jwt token
     const response = await fetch("https://zone01normandie.org/api/graphql-engine/v1/graphql", {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${getJWT()}`,
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -35,10 +33,8 @@ export async function fetchUserData() {
     })
 
     if (!response.ok) {
-        throw new Error("Failed to fetch user data");
-    }
-
-    
+        throw new Error("Failed to fetch user data (id and login)");
+    }    
 
     const user_data = await response.json();
     console.log(user_data);
@@ -48,5 +44,32 @@ export async function fetchUserData() {
 };
 
 export async function fetchXPData() {
-    //nothing for the moment
+    const token = sessionStorage.getItem("jwt");
+    const response = await fetch("https://zone01normandie.org/api/graphql-engine/v1/graphql", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: `
+              {
+                transaction(where: { type: { _eq: "xp" } }) {
+                  amount
+                  createdAt
+                  path
+                }
+              }
+            `
+        })
+    });
+    if (!response.ok) {
+        throw new Error("Failed to fetch user data (XP)");
+    }
+
+    const user_xp = await response.json();
+    console.log(user_xp);
+    //return the data of the first user : me
+
+    return user_xp.data.transaction; 
 }

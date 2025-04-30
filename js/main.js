@@ -25,7 +25,7 @@ export async function createProfilePage() {
 
     } catch (error) {
         console.error("Failed to fetch user data:", error.message);
-        localStorage.removeItem("jwt");
+        sessionStorage.removeItem("jwt");
         document.body.innerHTML = "";
         createLoginForm();
     }

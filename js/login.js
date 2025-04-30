@@ -1,5 +1,4 @@
 import { createProfilePage } from './main.js';
-import { setJWT } from './session.js';
 
 
 //create login form 
@@ -101,7 +100,8 @@ export async function login(username, password) {
     let token = await response.text();
     token = token.replace(/^"|"$/g, '');
 
-    setJWT(token);
+    sessionStorage.setItem("jwt", token);
+    //save it for this session
 
     return token;
   }
