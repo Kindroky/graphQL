@@ -1,3 +1,5 @@
+import { getJWT } from './session.js';
+
 /**
  * Fetches the user's profile data from the Zone01 GraphQL API.
  
@@ -17,7 +19,7 @@ export async function fetchUserData() {
     const response = await fetch("https://zone01normandie.org/api/graphql-engine/v1/graphql", {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${getJWT()}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -44,3 +46,7 @@ export async function fetchUserData() {
 
     return user_data.data.user[0]; 
 };
+
+export async function fetchXPData() {
+    //nothing for the moment
+}

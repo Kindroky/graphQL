@@ -1,3 +1,7 @@
+import { createProfilePage } from './main.js';
+import { setJWT } from './session.js';
+
+
 //create login form 
 
 function createLoginForm() {
@@ -40,6 +44,7 @@ async function handleLoginSubmit(event) {
     try {
         const token = await login(username, password);
         console.log("Logged in successfully. JWT:", token);
+        await createProfilePage();
 
         // After login, we will switch to profile page later
         // Example: createProfilePage();
@@ -96,9 +101,9 @@ export async function login(username, password) {
     let token = await response.text();
     token = token.replace(/^"|"$/g, '');
 
-    //store it in local storage
-    localStorage.setItem("jwt", token);
+    setJWT(token);
 
     return token;
   }
 
+export {createLoginForm}

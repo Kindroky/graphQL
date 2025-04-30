@@ -1,22 +1,14 @@
 import { login, createLoginForm } from './login.js';
 import { fetchUserData } from './api.js';
 
-// When the page loads
-window.addEventListener("DOMContentLoaded", () => {
-    // Check if user already has a JWT
-    const token = localStorage.getItem("jwt");
 
-    if (token) {
-        console.log("User already logged in, fetching profile...");
-        createProfilePage();
-    } else {
-        console.log("No token found, showing login form...");
-        createLoginForm();
-    }
+window.addEventListener("DOMContentLoaded", () => {
+    localStorage.removeItem("jwt"); // delete any saved session
+    createLoginForm();              // show login form
 });
 
 // if logged in, create profile page
-async function createProfilePage() {
+export async function createProfilePage() {
     try {
         const userData = await fetchUserData();
         console.log("User data fetched successfully:", userData);
@@ -33,7 +25,6 @@ async function createProfilePage() {
 
     } catch (error) {
         console.error("Failed to fetch user data:", error.message);
-        // If token is invalid, clear localStorage and show login again
         localStorage.removeItem("jwt");
         document.body.innerHTML = "";
         createLoginForm();
