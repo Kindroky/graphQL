@@ -1,8 +1,7 @@
 import { createProfilePage } from './main.js';
 
 
-//create login form 
-
+//create login form dynamically
 function createLoginForm() {
     const form = document.createElement("form");
     form.id = "login-form";
