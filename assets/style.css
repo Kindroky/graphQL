@@ -1,1 +1,77 @@
-    
+body {
+    background: #f0f2f5;
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+
+#dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 40px auto;
+    background-color: rgba(31, 30, 30, 0.8);
+    border-radius: 16px;
+  }
+  
+
+  .dashboard-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+  }
+  
+
+.skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.skill-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.skill-label {
+    flex-shrink: 0;
+    width: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+}
+
+.skill-bar-container {
+    flex: 1;
+    height: 12px;
+    background: #eaeaea;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.skill-bar {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.4s ease;
+}
+  
+
+#xp-graph {
+    overflow-x: auto;
+    width: 100%;
+  }
+
+  
+@media (max-width: 600px) {
+    #dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+  
