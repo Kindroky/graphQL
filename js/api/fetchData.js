@@ -22,12 +22,14 @@ export async function fetchUserData() {
         },
         body: JSON.stringify({
             query: `
-              {
-                user {
-                  id
-                  login
-                }
-              }
+        {
+          user {
+            login
+            totalUp
+            totalDown
+            auditRatio
+          }
+        }
             `
         })
     })

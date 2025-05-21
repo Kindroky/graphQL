@@ -1,73 +1,87 @@
 body {
-    background: #f0f2f5;
+    background-color: #fff7f8;
+    font-family: sans-serif;
     margin: 0;
-    font-family: "Segoe UI", sans-serif;
+    padding: 0;
   }
   
-
-#dashboard {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
+  .dashboard-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    padding: 30px;
     max-width: 1200px;
-    margin: 40px auto;
-    background-color: rgba(31, 30, 30, 0.8);
-    border-radius: 16px;
+    margin: 0 auto;
   }
   
-
-  .dashboard-card {
-    background: white;
+  .sidebar {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .logout-btn {
+    background-color: #88cc88;
+    color: white;
+    border: none;
     border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
   }
   
-
-.skills-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.skill-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.skill-label {
-    flex-shrink: 0;
-    width: 100px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444;
-}
-
-.skill-bar-container {
-    flex: 1;
-    height: 12px;
-    background: #eaeaea;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-.skill-bar {
-    height: 100%;
-    border-radius: 6px;
-    transition: width 0.4s ease;
-}
+  .profile-card {
+    background-color: #fbd4d9;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #ddd;
+  }
   
+  .audit-card {
+    background-color: #c9f2c7;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #ddd;
+  }
 
+  .xp-section {
+    flex: 1;
+    background-color: #fbd4d9;
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    overflow-x: auto;
+  }
+  
+  .bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  
+  .bar {
+    height: 100%;
+    border-radius: 4px;
+  }
+  
+  .bar.done {
+    background-color: #88cc88;
+  }
+  
+  .bar.received {
+    background-color: #f48fb1;
+  }
+  
 #xp-graph {
     overflow-x: auto;
     width: 100%;
+    padding: 20px;
   }
-
   
 @media (max-width: 600px) {
     #dashboard {
