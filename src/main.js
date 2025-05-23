@@ -3,10 +3,13 @@ import { fetchUserData, fetchXPData } from './api/fetchData.js';
 import { transformXPData } from './processData.js';
 import { renderDashboard } from './render/renderDashboard.js';
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", initializeApp);
+
+function initializeApp() {
   sessionStorage.removeItem("jwt");
+  document.body.innerHTML = "";
   createLoginForm();
-});
+}
 
 export async function createProfilePage() {
   try {
@@ -14,13 +17,12 @@ export async function createProfilePage() {
     const rawXP = await fetchXPData();
     const xpData = transformXPData(rawXP);
 
-    document.body.innerHTML = ""; // Clear login form
-    const dashboard = renderDashboard(userData, xpData);
+    document.body.innerHTML = "";
+    const dashboard = renderDashboard(userData, xpData, rawXP); // 👈 Pass rawXP here
     document.body.appendChild(dashboard);
   } catch (error) {
-    console.error("Erreur chargement profil:", error.message);
+    console.error("Erreur lors du chargement du profil:", error.message);
     sessionStorage.removeItem("jwt");
-    document.body.innerHTML = "";
-    createLoginForm();
+    initializeApp();
   }
 }
