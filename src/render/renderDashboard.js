@@ -62,20 +62,26 @@ export function renderDashboard(userData, xpData, rawXP) {
   });
   sidebar.appendChild(logoutBtn);
 
-  // ✅ Display raw XP (not in KB)
   const totalXP = rawXP.reduce((sum, tx) => sum + (tx.amount || 0), 0);
   const profileCard = createCard("#fcd9e0", `Hi ${userData.login} 👋`);
   const totalXPText = document.createElement("p");
-  totalXPText.textContent = `You’ve earned ${totalXP.toLocaleString()} XP! 🎉`;
+  totalXPText.textContent = `You’ve earned ${totalXP.toLocaleString()} XP!`;
   totalXPText.style.marginTop = "5px";
   totalXPText.style.fontSize = "1rem";
   profileCard.appendChild(totalXPText);
   sidebar.appendChild(profileCard);
 
+  // ✅ Audit section logic fixed
   const up = userData.totalUp ?? 0;
   const down = userData.totalDown ?? 1;
   const ratio = userData.auditRatio ?? 1;
-  const doneWidth = down > 0 ? (up / down) * 100 : 100;
+
+  const maxValue = Math.max(up, down);
+  const doneWidth = (up / maxValue) * 100;
+  const receivedWidth = (down / maxValue) * 100;
+
+  const upInMB = (up / 1_000_000).toFixed(2);
+  const downInMB = (down / 1_000_000).toFixed(2);
 
   const auditCard = document.createElement("div");
   auditCard.className = "audit-card";
@@ -88,14 +94,16 @@ export function renderDashboard(userData, xpData, rawXP) {
 
   auditCard.innerHTML = `
     <h3>Audit Info</h3>
-    <p><strong>⬆ Done:</strong> ${(up / 1_000_000).toFixed(2)} MB</p>
+    <p><strong>⬆ Done:</strong> ${upInMB} MB</p>
     <div class="bar-container">
       <div class="bar done" style="width: ${doneWidth}%"></div>
     </div>
-    <p><strong>⬇ Received:</strong> ${(down / 1_000_000).toFixed(2)} MB</p>
+
+    <p><strong>⬇ Received:</strong> ${downInMB} MB</p>
     <div class="bar-container">
-      <div class="bar received" style="width: 100%"></div>
+      <div class="bar received" style="width: ${receivedWidth}%"></div>
     </div>
+
     <p><strong>Ratio:</strong> ${ratio.toFixed(2)}</p>
   `;
   sidebar.appendChild(auditCard);
