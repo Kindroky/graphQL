@@ -31,7 +31,7 @@ export function createLoginForm() {
   });
 
   const title = document.createElement("h2");
-  title.innerText = "Welcome!";
+  title.innerText = "Welcome to graphZ01! In just a moment you will be able to see your data! Enter your credentials please.";
   Object.assign(title.style, {
     textAlign: "center",
     marginBottom: "20px",
