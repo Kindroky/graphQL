@@ -1,36 +1,82 @@
 import { createProfilePage } from './main.js';
 
-
 //create login form dynamically
 function createLoginForm() {
+    const wrapper = document.createElement("div");
+    wrapper.id = "login-wrapper";
+    wrapper.style.display = "flex";
+    wrapper.style.flexDirection = "column";
+    wrapper.style.alignItems = "center";
+    wrapper.style.justifyContent = "center";
+    wrapper.style.height = "100vh";
+    wrapper.style.backgroundColor = "#fbd4d9";
+    wrapper.style.fontFamily = "Arial, sans-serif";
+
     const form = document.createElement("form");
     form.id = "login-form";
+    form.style.display = "flex";
+    form.style.flexDirection = "column";
+    form.style.padding = "30px";
+    form.style.border = "1px solid #ccc";
+    form.style.borderRadius = "8px";
+    form.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
+    form.style.backgroundColor = "#4CAF50";
+    form.style.minWidth = "300px";
 
-    const usernameInput = document.createElement("input") ;
+    const title = document.createElement("h2");
+    title.innerText = "Welcome!";
+    title.style.textAlign = "center";
+    title.style.marginBottom = "20px";
+    title.style.color = "#333";
+
+    const usernameInput = document.createElement("input");
     usernameInput.type = "text";
     usernameInput.id = "credentials";
     usernameInput.placeholder = "Username or Email";
     usernameInput.required = true;
+    usernameInput.style.marginBottom = "15px";
+    usernameInput.style.padding = "10px";
+    usernameInput.style.border = "1px solid #ccc";
+    usernameInput.style.borderRadius = "5px";
 
     const passwordInput = document.createElement("input");
     passwordInput.type = "password";
     passwordInput.id = "password";
     passwordInput.placeholder = "Password";
     passwordInput.required = true;
+    passwordInput.style.marginBottom = "15px";
+    passwordInput.style.padding = "10px";
+    passwordInput.style.border = "1px solid #ccc";
+    passwordInput.style.borderRadius = "5px";
 
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
     submitButton.innerText = "Login";
+    submitButton.style.padding = "10px";
+    submitButton.style.backgroundColor = "#fbd4d9";
+    submitButton.style.color = "black";
+    submitButton.style.border = "none";
+    submitButton.style.borderRadius = "5px";
+    submitButton.style.cursor = "pointer";
 
+    submitButton.addEventListener("mouseover", () => {
+        submitButton.style.backgroundColor = "#d8a9af";
+    });
+    submitButton.addEventListener("mouseout", () => {
+        submitButton.style.backgroundColor = "#fbd4d9";
+    });
+
+    form.appendChild(title);
     form.appendChild(usernameInput);
     form.appendChild(passwordInput);
     form.appendChild(submitButton);
 
-    document.body.appendChild(form);
+    wrapper.appendChild(form);
+    document.body.appendChild(wrapper);
 
-    // Add the event listener to handle login
     form.addEventListener("submit", handleLoginSubmit);
 }
+
 
 //manage login logic and errors
 async function handleLoginSubmit(event) {

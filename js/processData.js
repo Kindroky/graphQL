@@ -16,13 +16,3 @@ export function transformXPData(rawTransactions) {
     
     return Array.from(grouped.values());
 }
-
-export function transformSkillsData(progresses) {
-    return progresses
-      .filter(p => p.grade > 0)
-      .map(p => ({
-        name: p.path.split("/").pop().replace("skill-", ""),
-        level: parseFloat(p.grade.toFixed(2))
-      }));
-  }
-  

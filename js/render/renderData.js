@@ -3,8 +3,8 @@ export function renderXP(data) {
   const sorted = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
   const recent = sorted.slice(-8);
 
-  const svgWidth = 800;
-  const svgHeight = 400;
+  const svgWidth = 800;         // Réduit pour éviter le scroll
+  const svgHeight = 240;
   const margin = 30;
   const usableWidth = svgWidth - margin * 2;
   const barWidth = usableWidth / recent.length;
@@ -14,8 +14,10 @@ export function renderXP(data) {
   svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
   svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
   svg.style.width = "100%";
-  svg.style.height = "auto";
+  svg.style.height = "240px";
   svg.style.display = "block";
+  svg.style.overflow = "hidden";
+  svg.style.maxWidth = "100%";
 
   const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
   xAxis.setAttribute("x1", 0);
@@ -66,47 +68,69 @@ export function renderXP(data) {
     svg.appendChild(xpLabel);
   });
 
-  const container = document.createElement("div");
-  container.id = "xp-graph";
-  container.style.width = "100%";
-  container.style.maxWidth = "100%";
-  container.style.overflowX = "auto";
-  container.style.margin = "30px auto";
-  container.style.border = "1px solid #ccc";
-  container.style.padding = "10px";
-  container.appendChild(svg);
-
-  return container;
+  return svg;
 }
 
-  
-// render level in horizontal progress bars
-export function renderSkills(skills) {
-    const container = document.createElement("div");
-    container.classList.add("skills-container");
+function computeCumulativeXP(data) {
+  const sorted = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const result = [];
+  let total = 0;
+  for (const d of sorted) {
+    total += d.xp;
+    result.push({ date: d.date, totalXP: total });
+  }
+  return result;
+}
 
-    for (const skill of skills) {
-        const skillRow = document.createElement("div");
-        skillRow.classList.add("skill-row");
+export function renderXPLine(data, options = {}) {
+  const strokeColor = options.strokeColor || "green";
 
-        const label = document.createElement("span");
-        label.classList.add("skill-label");
-        label.innerText = skill.name;
+  const points = computeCumulativeXP(data);
 
-        const barContainer = document.createElement("div");
-        barContainer.classList.add("skill-bar-container");
+  const svgWidth = 800;              
+  const svgHeight = 240;
+  const margin = 30;
+  const usableWidth = svgWidth - margin * 2;
+  const usableHeight = svgHeight - margin * 2;
+  const maxXP = points.at(-1).totalXP;
 
-        const bar = document.createElement("div");
-        bar.classList.add("skill-bar");
-        const percent = Math.min((skill.level / 20) * 100, 100);
-        bar.style.width = `${percent}%`;
-        bar.style.backgroundColor = `hsl(${(percent * 1.2 + 180) % 360}, 70%, 65%)`;
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+  svg.style.width = "100%";
+  svg.style.height = "240px";
+  svg.style.display = "block";
+  svg.style.overflow = "hidden";
+  svg.style.maxWidth = "100%";
 
-        barContainer.appendChild(bar);
-        skillRow.appendChild(label);
-        skillRow.appendChild(barContainer);
-        container.appendChild(skillRow);
-    }
+  // === Path of the XP curve
+  const pathData = points.map((point, i) => {
+    const x = margin + (i / (points.length - 1)) * usableWidth;
+    const y = svgHeight - margin - (point.totalXP / maxXP) * usableHeight;
+    return `${i === 0 ? "M" : "L"} ${x} ${y}`;
+  }).join(" ");
 
-    return container;
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", pathData);
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", strokeColor);
+  path.setAttribute("stroke-width", "2");
+  svg.appendChild(path);
+
+  // === X-axis labels (dates)
+  const tickCount = 5;
+  for (let i = 0; i <= tickCount; i++) {
+    const index = Math.floor(i * (points.length - 1) / tickCount);
+    const point = points[index];
+    const x = margin + (index / (points.length - 1)) * usableWidth;
+
+    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    label.setAttribute("x", x);
+    label.setAttribute("y", svgHeight - 8);
+    label.setAttribute("text-anchor", "middle");
+    label.setAttribute("font-size", "10");
+    label.textContent = point.date;
+    svg.appendChild(label);
+  }
+
+  return svg;
 }
