@@ -4,7 +4,7 @@ This project is a fully client-side web application that interfaces with the Zon
 
 The dashboard includes a secure authentication flow using JWT, and dynamically renders XP progression and project-level performance via custom SVG graphs. All logic, from GraphQL data handling to DOM rendering, is modularized and structured for clarity and maintainability.
 
-You can check out the site live at [https://kindroky.github.io/graphQL/](https://kindroky.github.io/graphQL/). But you'll need credentials from Zone01 to login. If you don't have any below are some screenshots of what the site looks like : 
+You can check out the site live at [https://kindroky.github.io/graphQL/](https://kindroky.github.io/graphQL/). But you'll need credentials from Zone01 to login. If you don't have any, below are some screenshots of what the site looks like : 
 
 ![Login Screenshot](./assets/login.png)
 ![Dashboard Screenshot](./assets/dashboard.png)
@@ -24,7 +24,7 @@ You can check out the site live at [https://kindroky.github.io/graphQL/](https:/
 - HTML, CSS, JavaScript
 - GraphQL (Zone01 API)
 - SVG for custom data visualizations
-- Hosted on GitHub Pages (or Netlify/Vercel)
+- Hosted on GitHub Pages
 
 ## Usage
 
