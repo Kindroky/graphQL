@@ -16,11 +16,13 @@ export function renderXP(data) {
   const recent = sorted.slice(-8);
 
   const svgWidth = 600;
-  const svgHeight = 240;
+  const svgHeight = 400;
   const margin = 30;
+  const topPadding = 40; // espace au-dessus des barres pour les labels
   const usableWidth = svgWidth - margin * 2;
   const barWidth = usableWidth / recent.length;
   const maxXP = Math.max(...recent.map(d => d.xp));
+  const maxBarHeight = svgHeight - 40 - topPadding; // espace bas pour axe + espace haut
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
@@ -41,42 +43,53 @@ export function renderXP(data) {
   xAxis.setAttribute("stroke", "#000");
   svg.appendChild(xAxis);
 
-  // Bars and labels
   recent.forEach((d, i) => {
-    const barHeight = (d.xp / maxXP) * (svgHeight - 60);
+    const barHeight = (d.xp / maxXP) * maxBarHeight;
     const color = `hsl(145, 60%, ${80 - i * 6}%)`;
     const barX = margin + i * barWidth;
-    const labelX = barX + barWidth * 0.35;
+    const barTop = svgHeight - 40 - barHeight;
+    const barCenterX = barX + barWidth * 0.35;
 
     // Bar
     const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect.setAttribute("x", barX);
-    rect.setAttribute("y", svgHeight - barHeight - 40);
+    rect.setAttribute("y", barTop);
     rect.setAttribute("width", barWidth * 0.7);
     rect.setAttribute("height", barHeight);
     rect.setAttribute("fill", color);
     svg.appendChild(rect);
 
-    // Labels: project name, XP, and date
-    const labels = [
-      { text: d.project, yOffset: -45, size: "10" },
-      { text: `${d.xp}`, yOffset: -60, size: "9" },
-      { text: d.date, yOffset: 15, size: "9" }
-    ];
+    // Project title
+    const projLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    projLabel.textContent = d.project;
+    projLabel.setAttribute("x", barCenterX);
+    projLabel.setAttribute("y", barTop - 8); // 8px au-dessus de la barre
+    projLabel.setAttribute("font-size", "11");
+    projLabel.setAttribute("text-anchor", "middle");
+    svg.appendChild(projLabel);
 
-    labels.forEach(({ text, yOffset, size }) => {
-      const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      label.textContent = text;
-      label.setAttribute("x", labelX);
-      label.setAttribute("y", svgHeight - barHeight + yOffset);
-      label.setAttribute("font-size", size);
-      label.setAttribute("text-anchor", "middle");
-      svg.appendChild(label);
-    });
+    // XP value
+    const xpLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    xpLabel.textContent = `${d.xp}`;
+    xpLabel.setAttribute("x", barCenterX);
+    xpLabel.setAttribute("y", barTop - 22); // 22px au-dessus de la barre
+    xpLabel.setAttribute("font-size", "10");
+    xpLabel.setAttribute("text-anchor", "middle");
+    svg.appendChild(xpLabel);
+
+    // Date under the bar
+    const dateLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    dateLabel.textContent = d.date;
+    dateLabel.setAttribute("x", barCenterX);
+    dateLabel.setAttribute("y", svgHeight - 20);
+    dateLabel.setAttribute("font-size", "9");
+    dateLabel.setAttribute("text-anchor", "middle");
+    svg.appendChild(dateLabel);
   });
 
   return svg;
 }
+
 
 // === Render XP line chart over time
 export function renderXPLine(data, options = {}) {
@@ -84,7 +97,7 @@ export function renderXPLine(data, options = {}) {
   const points = computeCumulativeXP(data);
 
   const svgWidth = 600;
-  const svgHeight = 240;
+  const svgHeight = 400;
   const margin = 30;
   const usableWidth = svgWidth - margin * 2;
   const usableHeight = svgHeight - margin * 2;
